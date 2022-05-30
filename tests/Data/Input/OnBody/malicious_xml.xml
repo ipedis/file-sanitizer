@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Example>
+    <TEXT>
+        <![CDATA[<S]]>CRIP<![CDATA[T>]]>
+        alert(document.cookie);
+        <![CDATA[</S]]>CRIP<![CDATA[T>]]>
+    </TEXT>
+    <Thermostat>
+        &lt;script&gt;alert('hacked');&lt;/script&gt;
+    </Thermostat>
+    <script type="text/javascript">
+        window.onerror = function () { return true; }
+    </script>
+</Example>
