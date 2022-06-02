@@ -9,9 +9,7 @@ final class PhpTagCleanupStep extends CleanupStepAbstract
     protected function process(Payload $payload): Payload
     {
         $content = $payload->getContent();
-        $content = str_replace("<?php", '', $content);
-        $content = str_replace("<?", '', $content);
-        $content = str_replace("?>", '', $content);
+        $content = str_replace(['<?php', '<?', '?>'], '', $content);
 
         return $payload->setContent($content);
     }
