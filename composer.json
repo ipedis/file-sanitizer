@@ -1,5 +1,6 @@
 {
   "name": "ipedis/file-sanitizer",
+  "type": "library",
   "autoload": {
     "psr-4": {
       "Ipedis\\FileSanitizer\\": "src/"
@@ -20,9 +21,8 @@
   },
   "minimum-stability": "stable",
   "require": {
-    "php": "^8.1",
+    "php": ">=8.1",
     "league/pipeline": "^1.0",
-    "symfony/process": "^6.0",
     "ext-dom": "*",
     "ext-libxml": "*"
   },
