@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests\Unit\Factory;
 
 use Ipedis\FileSanitizer\Configuration\Configuration;

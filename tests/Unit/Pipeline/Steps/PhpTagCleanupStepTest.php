@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests\Unit\Pipeline\Steps;
 
 use Ipedis\FileSanitizer\Pipeline\Payload;
@@ -11,11 +13,11 @@ final class PhpTagCleanupStepTest extends TestCase
     public function testProcess(): void
     {
         $payload = Payload::build(
-            content: '<?php echo \'hacked\' ?>'
+            content: "<?php echo 'hacked' ?>"
         );
-        $cleanup = new PhpTagCleanupStep();
-        $payload = $cleanup($payload);
-        $this->assertFalse(str_contains($payload->getContent(), '<?php'));
-        $this->assertFalse(str_contains($payload->getContent(), '?>'));
+        $phpTagCleanupStep = new PhpTagCleanupStep();
+        $payload = $phpTagCleanupStep($payload);
+        $this->assertStringNotContainsString('<?php', $payload->getContent());
+        $this->assertStringNotContainsString('?>', $payload->getContent());
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests\Unit\Pipeline\Steps;
 
 use Ipedis\FileSanitizer\Pipeline\Payload;
@@ -13,8 +15,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<script type="text/javascript">alert("hacked");</script>'
         );
-        $cleanup = new ScriptTagCleanupStep();
-        $payload = $cleanup($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $payload = $scriptTagCleanupStep($payload);
         $this->assertEmpty($payload->getContent());
     }
 }

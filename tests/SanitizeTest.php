@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests;
 
 use DOMDocument;
@@ -65,47 +67,44 @@ CONTENT;
         );
         $dirty = 'content';
         $sanitized = $sanitize->process($dirty);
-        $this->assertEquals($sanitized->getContent(), 'new custom step');
+        $this->assertSame('new custom step', $sanitized->getContent());
     }
 
-    public function provideFileData(): array
+    public function provideFileData(): \Iterator
     {
-        return [
-            0 => [
-                'malicious_file' => [
-                    'name' => 'malicious_html.html',
-                    'path' => __DIR__ . '/Data/Input/OnBody/malicious_html.html'
-                ],
-                'sanitized_file' => [
-                    'name' => 'sanitized_html.html',
-                    'path' => __DIR__ . '/Data/Output/OnBody/sanitized_html.html'
+        yield 0 => [
+            'malicious_file' => [
+                'name' => 'malicious_html.html',
+                'path' => __DIR__ . '/Data/Input/OnBody/malicious_html.html'
+            ],
+            'sanitized_file' => [
+                'name' => 'sanitized_html.html',
+                'path' => __DIR__ . '/Data/Output/OnBody/sanitized_html.html'
 
-                ],
-                'type' => 'html'
             ],
-            1 => [
-                'malicious_file' => [
-                    'name' => 'malicious_xml.xml',
-                    'path' => __DIR__ . '/Data/Input/OnBody/malicious_xml.xml'
-                ],
-                'sanitized_file' => [
-                    'name' => 'sanitized_xml.xml',
-                    'path' => __DIR__ . '/Data/Output/OnBody/sanitized_xml.xml'
-                ],
-                'type' => 'xml'
+            'type' => 'html'
+        ];
+        yield 1 => [
+            'malicious_file' => [
+                'name' => 'malicious_xml.xml',
+                'path' => __DIR__ . '/Data/Input/OnBody/malicious_xml.xml'
             ],
-            2 => [
-                'malicious_file' => [
-                    'name' => 'malicious_html.html',
-                    'path' => __DIR__ . '/Data/Input/OnAttr/malicious_html.html'
-                ],
-                'sanitized_file' => [
-                    'name' => 'sanitized_html.html',
-                    'path' => __DIR__ . '/Data/Output/OnAttr/sanitized_html.html'
-                ],
-                'type' => 'html'
+            'sanitized_file' => [
+                'name' => 'sanitized_xml.xml',
+                'path' => __DIR__ . '/Data/Output/OnBody/sanitized_xml.xml'
             ],
-
+            'type' => 'xml'
+        ];
+        yield 2 => [
+            'malicious_file' => [
+                'name' => 'malicious_html.html',
+                'path' => __DIR__ . '/Data/Input/OnAttr/malicious_html.html'
+            ],
+            'sanitized_file' => [
+                'name' => 'sanitized_html.html',
+                'path' => __DIR__ . '/Data/Output/OnAttr/sanitized_html.html'
+            ],
+            'type' => 'html'
         ];
     }
 
@@ -114,7 +113,7 @@ CONTENT;
         $domInput = new DOMDocument('1.0', 'UTF-8');
         $domOutput = new DOMDocument('1.0', 'UTF-8');
 
-        if ('html' == $type) {
+        if ('html' === $type) {
             @$domInput->loadHTML('<?xml encoding="utf-8" ?>' . $input);
             @$domOutput->loadHTML('<?xml encoding="utf-8" ?>' . $output);
         } else {
@@ -128,9 +127,10 @@ CONTENT;
         if (count($inputNodes) !== count($outputNodes)) {
             return false;
         }
+        $counter = count($inputNodes);
 
         //check one by one all element
-        for ($i = 0; $i < count($inputNodes); $i++) {
+        for ($i = 0; $i < $counter; ++$i) {
             if (!$this->isSameNode($inputNodes[$i], $outputNodes[$i])) {
                 return false;
             }
@@ -139,41 +139,44 @@ CONTENT;
         return true;
     }
 
-    private function isSameNode(DOMNode $nodeToCompare, DOMNode $nodeReferred)
+    private function isSameNode(DOMNode $nodeToCompare, DOMNode $nodeReferred): bool
     {
         if ($nodeToCompare->tagName !== $nodeReferred->tagName) {
             return false;
         }
+
         $comparedValue = str_replace(' ', '', str_replace("\n", '', $nodeToCompare->nodeValue));
         $referredValue = str_replace(' ', '', str_replace("\n", '', $nodeReferred->nodeValue));
         if (trim($comparedValue) !== trim($referredValue)) {
             return false;
         }
+
         if ($nodeToCompare->prefix !== $nodeReferred->prefix) {
             return false;
         }
+
         if (!$nodeToCompare->hasAttributes() && $nodeReferred->hasAttributes()) {
             return false;
-        } else {
-            if (!$nodeReferred->hasAttributes() && $nodeToCompare->hasAttributes()) {
-                return false;
-            } else {
-                foreach ($nodeToCompare->attributes as $attribute) {
-                    $findAttributeWithSameValue = false;
-                    foreach ($nodeReferred->attributes as $attributeReferred) {
-                        if (
-                            $attributeReferred->name === $attribute->name
-                            && ($attributeReferred->value === $attribute->value)
-                        ) {
-                            $findAttributeWithSameValue = true;
-                        }
-                    }
-                    if (!$findAttributeWithSameValue) {
-                        return false;
-                    }
+        }
+        if (!$nodeReferred->hasAttributes() && $nodeToCompare->hasAttributes()) {
+            return false;
+        }
+        foreach ($nodeToCompare->attributes as $attribute) {
+            $findAttributeWithSameValue = false;
+            foreach ($nodeReferred->attributes as $attributeReferred) {
+                if (
+                    $attributeReferred->name === $attribute->name
+                    && ($attributeReferred->value === $attribute->value)
+                ) {
+                    $findAttributeWithSameValue = true;
                 }
             }
+
+            if (!$findAttributeWithSameValue) {
+                return false;
+            }
         }
+
         return true;
     }
 

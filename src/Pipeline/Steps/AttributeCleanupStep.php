@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\FileSanitizer\Pipeline\Steps;
 
 use DOMDocument;
@@ -13,9 +15,9 @@ final class AttributeCleanupStep extends CleanupStepAbstract
     protected function process(Payload $payload): Payload
     {
         $content = $payload->getContent();
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        @$dom->loadHTML($content, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
-        $elements = $dom->getElementsByTagName('*');
+        $domDocument = new DOMDocument('1.0', 'UTF-8');
+        @$domDocument->loadHTML($content, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+        $elements = $domDocument->getElementsByTagName('*');
         /** @var DOMElement $element */
         foreach ($elements as $element) {
             if ($element->hasAttributes()) {
@@ -24,15 +26,16 @@ final class AttributeCleanupStep extends CleanupStepAbstract
                     if (str_starts_with($attribute->name, 'on')) {
                         $element->removeAttribute($attribute->name);
                     }
+
                     //remove javascript code on attribute value
                     $attrValue = preg_replace('/\s+/', '', html_entity_decode($attribute->value));
-                    if (preg_match(self::ALERT_PATTERN, $attrValue) || str_contains($attrValue, 'javascript')) {
+                    if (preg_match(self::ALERT_PATTERN, (string) $attrValue) || str_contains((string) $attrValue, 'javascript')) {
                         $attribute->value = '';
                     }
                 }
             }
         }
 
-        return $payload->setContent($dom->saveHTML());
+        return $payload->setContent($domDocument->saveHTML());
     }
 }

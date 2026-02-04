@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests\Unit\Pipeline\Steps;
 
 use Ipedis\FileSanitizer\Pipeline\Payload;
@@ -13,8 +15,8 @@ final class StyleTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<style>li {list-style-image: url("javascript:alert(\'XSS\')");}</style><ul><li>blabla</li></ul>'
         );
-        $cleanup = new StyleTagCleanupStep();
-        $payload = $cleanup($payload);
-        $this->assertFalse(str_contains($payload->getContent(), 'url("javascript:alert(\'XSS\')")'));
+        $styleTagCleanupStep = new StyleTagCleanupStep();
+        $payload = $styleTagCleanupStep($payload);
+        $this->assertStringNotContainsString('url("javascript:alert(\'XSS\')")', $payload->getContent());
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests\Unit\Configuration;
 
 use Ipedis\FileSanitizer\Configuration\Configuration;
 use Ipedis\FileSanitizer\Exception\InvalidCleanupStepException;
 use Ipedis\FileSanitizer\Pipeline\Steps\CdataTagCleanupStep;
-use Ipedis\FileSanitizer\Pipeline\Steps\DomPurifierCleanupStep;
 use Ipedis\Tests\Unit\Configuration\Steps\InvalidCustomStep;
 use Ipedis\Tests\Unit\Configuration\Steps\ValidCustomStep;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +23,7 @@ final class ConfigurationTest extends TestCase
     public function testWithValidData(): void
     {
         $configuration = new Configuration(
-            ignoredSteps: [CdataTagCleanupStep::class, DomPurifierCleanupStep::class],
+            ignoredSteps: [CdataTagCleanupStep::class],
             customSteps: [ValidCustomStep::class]
         );
 

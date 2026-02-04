@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\FileSanitizer\Factory;
 
 use Ipedis\FileSanitizer\Configuration\Configuration;
@@ -11,8 +13,12 @@ use Ipedis\FileSanitizer\Sanitizer\Xml\XmlSanitizer;
 final class SanitizerFactory
 {
     private const HTML = 'html';
+
     private const XML = 'xml';
 
+    /**
+     * @throws InvalidSanitizerTypeException
+     */
     public static function build(string $type, ?Configuration $configuration): SanitizerInterface
     {
         return match ($type) {

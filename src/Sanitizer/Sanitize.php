@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\FileSanitizer\Sanitizer;
 
 
 use Ipedis\FileSanitizer\Configuration\Configuration;
 use Ipedis\FileSanitizer\Contract\SanitizerInterface;
+use Ipedis\FileSanitizer\Exception\InvalidSanitizerTypeException;
 use Ipedis\FileSanitizer\Factory\SanitizerFactory;
 use Ipedis\FileSanitizer\Pipeline\Payload;
 
 final class Sanitize
 {
-    private SanitizerInterface $sanitizer;
+    private readonly SanitizerInterface $sanitizer;
 
+    /**
+     * @throws InvalidSanitizerTypeException
+     */
     public function __construct(
         string $type,
         ?Configuration $configuration = null

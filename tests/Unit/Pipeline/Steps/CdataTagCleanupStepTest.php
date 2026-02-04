@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ipedis\Tests\Unit\Pipeline\Steps;
 
 use Ipedis\FileSanitizer\Pipeline\Payload;
@@ -13,8 +15,8 @@ final class CdataTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<![CDATA[ <s ]]>crip<![CDATA[ T> ]]>alert(document.cookie);<![CDATA[ </s ]]>CRIP<![CDATA[ T> ]]>'
         );
-        $cleanup = new CdataTagCleanupStep();
-        $payload = $cleanup($payload);
+        $cdataTagCleanupStep = new CdataTagCleanupStep();
+        $payload = $cdataTagCleanupStep($payload);
         $this->assertEmpty($payload->getContent());
     }
 }
