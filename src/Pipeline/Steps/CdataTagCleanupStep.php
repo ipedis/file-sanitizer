@@ -14,6 +14,6 @@ final class CdataTagCleanupStep extends CleanupStepAbstract
     {
         $content = $payload->getContent();
 
-        return $payload->setContent(preg_replace(self::PATTERN, '', $content));
+        return $payload->setContent((string) preg_replace(self::PATTERN, '', $content));
     }
 }

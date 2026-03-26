@@ -15,7 +15,7 @@ final class ScriptTagCleanupStep extends CleanupStepAbstract
     {
         $content = $payload->getContent();
         return $payload->setContent(
-            preg_replace(self::PATTERN, '', $content)
+            (string) preg_replace(self::PATTERN, '', $content)
         );
     }
 }

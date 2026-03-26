@@ -12,7 +12,6 @@ use League\Pipeline\PipelineInterface;
 
 abstract class PipelineSanitizerAbstract
 {
-
     public function __construct(public readonly ?Configuration $configuration)
     {
     }
@@ -23,6 +22,7 @@ abstract class PipelineSanitizerAbstract
     final public function sanitize(string $content): Payload
     {
         $pipeline = $this->build();
+        /** @var Payload */
         return $pipeline->process(Payload::build($content));
     }
 
@@ -32,13 +32,15 @@ abstract class PipelineSanitizerAbstract
     private function build(): PipelineInterface
     {
         $pipelineBuilder = new BasePipelineBuilder();
-        foreach ([...$this->getRegisteredCleanupStep(), ...$this->configuration?->customSteps ?? []] as $cleanupStep) {
-            if (in_array($cleanupStep, $this->configuration?->ignoredSteps ?? [])) {
+        $customSteps = $this->configuration instanceof Configuration ? $this->configuration->customSteps : [];
+        $ignoredSteps = $this->configuration instanceof Configuration ? $this->configuration->ignoredSteps : [];
+        foreach ([...$this->getRegisteredCleanupStep(), ...$customSteps] as $cleanupStep) {
+            if (in_array($cleanupStep, $ignoredSteps)) {
                 continue;
             }
 
-            if (!is_subclass_of($cleanupStep, CleanupStepAbstract::class)) {
-                throw new InvalidCleanupStepException(step: $cleanupStep);
+            if (!is_subclass_of((string) $cleanupStep, CleanupStepAbstract::class)) {
+                throw new InvalidCleanupStepException(step: (string) $cleanupStep);
             }
 
             $cleanupStep = new $cleanupStep();
@@ -50,7 +52,9 @@ abstract class PipelineSanitizerAbstract
 
     /**
      * ordered className list of cleanup.
+     *
+     * @return array<class-string<CleanupStepAbstract>>
      */
-    protected abstract function getRegisteredCleanupStep(): array;
+    abstract protected function getRegisteredCleanupStep(): array;
 
 }

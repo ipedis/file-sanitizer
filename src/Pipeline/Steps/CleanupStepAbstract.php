@@ -13,5 +13,5 @@ abstract class CleanupStepAbstract
         return $this->process($payload);
     }
 
-    protected abstract function process(Payload $payload): Payload;
+    abstract protected function process(Payload $payload): Payload;
 }

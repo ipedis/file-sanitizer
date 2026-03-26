@@ -10,7 +10,7 @@ use Ipedis\FileSanitizer\Pipeline\Payload;
 
 final class AttributeCleanupStep extends CleanupStepAbstract
 {
-    const ALERT_PATTERN = '#alert\((.*?)\)#';
+    public const ALERT_PATTERN = '#alert\((.*?)\)#';
 
     protected function process(Payload $payload): Payload
     {
@@ -20,22 +20,31 @@ final class AttributeCleanupStep extends CleanupStepAbstract
         $elements = $domDocument->getElementsByTagName('*');
         /** @var DOMElement $element */
         foreach ($elements as $element) {
-            if ($element->hasAttributes()) {
-                foreach ($element->attributes as $attribute) {
-                    //remove all js event on attribute
-                    if (str_starts_with($attribute->name, 'on')) {
-                        $element->removeAttribute($attribute->name);
-                    }
+            if (!$element->hasAttributes()) {
+                continue;
+            }
 
-                    //remove javascript code on attribute value
-                    $attrValue = preg_replace('/\s+/', '', html_entity_decode($attribute->value));
-                    if (preg_match(self::ALERT_PATTERN, (string) $attrValue) || str_contains((string) $attrValue, 'javascript')) {
-                        $attribute->value = '';
-                    }
+            $attributesToRemove = [];
+            foreach ($element->attributes as $attribute) {
+                //remove all js event on attribute
+                if (str_starts_with($attribute->name, 'on')) {
+                    $attributesToRemove[] = $attribute->name;
+
+                    continue;
                 }
+
+                //remove javascript code on attribute value
+                $attrValue = preg_replace('/\s+/', '', html_entity_decode($attribute->value));
+                if (preg_match(self::ALERT_PATTERN, (string) $attrValue) || str_contains((string) $attrValue, 'javascript')) {
+                    $attribute->value = '';
+                }
+            }
+
+            foreach ($attributesToRemove as $attributeToRemove) {
+                $element->removeAttribute($attributeToRemove);
             }
         }
 
-        return $payload->setContent($domDocument->saveHTML());
+        return $payload->setContent((string) $domDocument->saveHTML());
     }
 }
