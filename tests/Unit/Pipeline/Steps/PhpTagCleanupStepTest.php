@@ -17,8 +17,8 @@ final class PhpTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: "<?php echo 'hacked' ?>"
         );
-        $step = new PhpTagCleanupStep();
-        $result = $step($payload);
+        $phpTagCleanupStep = new PhpTagCleanupStep();
+        $result = $phpTagCleanupStep($payload);
         $this->assertStringNotContainsString('<?php', $result->getContent());
         $this->assertStringNotContainsString('?>', $result->getContent());
     }
@@ -29,8 +29,8 @@ final class PhpTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: "<? echo 'hacked' ?>"
         );
-        $step = new PhpTagCleanupStep();
-        $result = $step($payload);
+        $phpTagCleanupStep = new PhpTagCleanupStep();
+        $result = $phpTagCleanupStep($payload);
         $this->assertStringNotContainsString('<?', $result->getContent());
         $this->assertStringNotContainsString('?>', $result->getContent());
     }
@@ -41,8 +41,8 @@ final class PhpTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: "<?php echo 'a' ?> text <?php echo 'b' ?>"
         );
-        $step = new PhpTagCleanupStep();
-        $result = $step($payload);
+        $phpTagCleanupStep = new PhpTagCleanupStep();
+        $result = $phpTagCleanupStep($payload);
         $this->assertStringNotContainsString('<?php', $result->getContent());
         $this->assertStringContainsString('text', $result->getContent());
     }
@@ -53,8 +53,8 @@ final class PhpTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<p>no php here</p>'
         );
-        $step = new PhpTagCleanupStep();
-        $result = $step($payload);
+        $phpTagCleanupStep = new PhpTagCleanupStep();
+        $result = $phpTagCleanupStep($payload);
         $this->assertSame('<p>no php here</p>', $result->getContent());
     }
 
@@ -64,8 +64,8 @@ final class PhpTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: "<?php echo 'hacked' ?>"
         );
-        $step = new PhpTagCleanupStep();
-        $result = $step($payload);
+        $phpTagCleanupStep = new PhpTagCleanupStep();
+        $result = $phpTagCleanupStep($payload);
         $this->assertStringContainsString("echo 'hacked'", trim($result->getContent()));
     }
 }

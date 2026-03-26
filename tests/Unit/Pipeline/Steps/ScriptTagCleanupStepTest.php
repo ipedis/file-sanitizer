@@ -17,8 +17,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<script type="text/javascript">alert("hacked");</script>'
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertEmpty($result->getContent());
     }
 
@@ -28,8 +28,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<script>document.cookie;</script>'
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertEmpty($result->getContent());
     }
 
@@ -39,8 +39,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<p>text</p><script>a();</script><p>more</p><script>b();</script>'
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertStringNotContainsString('<script', $result->getContent());
         $this->assertStringContainsString('text', $result->getContent());
         $this->assertStringContainsString('more', $result->getContent());
@@ -52,8 +52,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<SCRIPT>alert("xss");</SCRIPT>'
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertStringNotContainsString('alert', $result->getContent());
     }
 
@@ -63,8 +63,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<p>safe content</p>'
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertSame('<p>safe content</p>', $result->getContent());
     }
 
@@ -74,8 +74,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<script src="https://evil.com/xss.js"></script>'
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertEmpty($result->getContent());
     }
 
@@ -85,8 +85,8 @@ final class ScriptTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: "<script>\nvar x = 1;\nalert(x);\n</script>"
         );
-        $step = new ScriptTagCleanupStep();
-        $result = $step($payload);
+        $scriptTagCleanupStep = new ScriptTagCleanupStep();
+        $result = $scriptTagCleanupStep($payload);
         $this->assertEmpty($result->getContent());
     }
 }

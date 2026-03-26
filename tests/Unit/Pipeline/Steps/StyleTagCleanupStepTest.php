@@ -17,8 +17,8 @@ final class StyleTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<style>li {list-style-image: url("javascript:alert(\'XSS\')");}</style><ul><li>blabla</li></ul>'
         );
-        $step = new StyleTagCleanupStep();
-        $result = $step($payload);
+        $styleTagCleanupStep = new StyleTagCleanupStep();
+        $result = $styleTagCleanupStep($payload);
         $this->assertStringNotContainsString('javascript', $result->getContent());
         $this->assertStringContainsString('blabla', $result->getContent());
     }
@@ -29,8 +29,8 @@ final class StyleTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<style>body { background: url("script:evil"); }</style><p>text</p>'
         );
-        $step = new StyleTagCleanupStep();
-        $result = $step($payload);
+        $styleTagCleanupStep = new StyleTagCleanupStep();
+        $result = $styleTagCleanupStep($payload);
         $this->assertStringNotContainsString('<style>', $result->getContent());
         $this->assertStringContainsString('text', $result->getContent());
     }
@@ -41,8 +41,8 @@ final class StyleTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<style>body { color: red; }</style><p>text</p>'
         );
-        $step = new StyleTagCleanupStep();
-        $result = $step($payload);
+        $styleTagCleanupStep = new StyleTagCleanupStep();
+        $result = $styleTagCleanupStep($payload);
         $this->assertStringContainsString('color: red', $result->getContent());
         $this->assertStringContainsString('text', $result->getContent());
     }
@@ -53,8 +53,8 @@ final class StyleTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<p>no styles here</p>'
         );
-        $step = new StyleTagCleanupStep();
-        $result = $step($payload);
+        $styleTagCleanupStep = new StyleTagCleanupStep();
+        $result = $styleTagCleanupStep($payload);
         $this->assertStringContainsString('no styles here', $result->getContent());
     }
 
@@ -64,8 +64,8 @@ final class StyleTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<style>body { color: blue; }</style><style>div { background: url("javascript:alert(1)"); }</style><p>text</p>'
         );
-        $step = new StyleTagCleanupStep();
-        $result = $step($payload);
+        $styleTagCleanupStep = new StyleTagCleanupStep();
+        $result = $styleTagCleanupStep($payload);
         $this->assertStringContainsString('color: blue', $result->getContent());
         $this->assertStringNotContainsString('javascript', $result->getContent());
     }

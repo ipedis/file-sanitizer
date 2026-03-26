@@ -17,8 +17,8 @@ final class CdataTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<![CDATA[ <s ]]>crip<![CDATA[ T> ]]>alert(document.cookie);<![CDATA[ </s ]]>CRIP<![CDATA[ T> ]]>'
         );
-        $step = new CdataTagCleanupStep();
-        $result = $step($payload);
+        $cdataTagCleanupStep = new CdataTagCleanupStep();
+        $result = $cdataTagCleanupStep($payload);
         $this->assertEmpty($result->getContent());
     }
 
@@ -28,8 +28,8 @@ final class CdataTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<root><item>safe content</item></root>'
         );
-        $step = new CdataTagCleanupStep();
-        $result = $step($payload);
+        $cdataTagCleanupStep = new CdataTagCleanupStep();
+        $result = $cdataTagCleanupStep($payload);
         $this->assertSame('<root><item>safe content</item></root>', $result->getContent());
     }
 
@@ -37,8 +37,8 @@ final class CdataTagCleanupStepTest extends TestCase
     public function it_handles_empty_content(): void
     {
         $payload = Payload::build(content: '');
-        $step = new CdataTagCleanupStep();
-        $result = $step($payload);
+        $cdataTagCleanupStep = new CdataTagCleanupStep();
+        $result = $cdataTagCleanupStep($payload);
         $this->assertSame('', $result->getContent());
     }
 
@@ -48,8 +48,8 @@ final class CdataTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: "<![CDATA[ <s ]]>crip<![CDATA[ T> ]]>\nmalicious content\n<![CDATA[ </s ]]>CRIP<![CDATA[ T> ]]>"
         );
-        $step = new CdataTagCleanupStep();
-        $result = $step($payload);
+        $cdataTagCleanupStep = new CdataTagCleanupStep();
+        $result = $cdataTagCleanupStep($payload);
         $this->assertStringNotContainsString('CDATA', $result->getContent());
         $this->assertStringNotContainsString('malicious', $result->getContent());
     }

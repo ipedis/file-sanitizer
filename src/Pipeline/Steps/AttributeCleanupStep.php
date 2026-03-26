@@ -40,8 +40,8 @@ final class AttributeCleanupStep extends CleanupStepAbstract
                 }
             }
 
-            foreach ($attributesToRemove as $attrName) {
-                $element->removeAttribute($attrName);
+            foreach ($attributesToRemove as $attributeToRemove) {
+                $element->removeAttribute($attributeToRemove);
             }
         }
 

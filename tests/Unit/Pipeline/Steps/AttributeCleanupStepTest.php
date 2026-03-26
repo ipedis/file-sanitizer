@@ -17,8 +17,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<img src="jav&#x09;ascript:alert(\'hacked\');">'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringNotContainsString('javascript', $result->getContent());
         $this->assertStringNotContainsString('alert', $result->getContent());
         $this->assertStringContainsString('<img', $result->getContent());
@@ -30,8 +30,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<div onclick="alert(1)" onmouseover="alert(2)">text</div>'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringNotContainsString('onclick', $result->getContent());
         $this->assertStringNotContainsString('onmouseover', $result->getContent());
         $this->assertStringContainsString('text', $result->getContent());
@@ -43,8 +43,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<img src="valid.jpg" onerror="alert(\'xss\')">'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringNotContainsString('onerror', $result->getContent());
         $this->assertStringContainsString('valid.jpg', $result->getContent());
     }
@@ -55,8 +55,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<a href="javascript:alert(\'xss\')">link</a>'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringNotContainsString('alert', $result->getContent());
         $this->assertStringContainsString('link', $result->getContent());
     }
@@ -67,8 +67,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<a href="https://example.com" class="link" id="main">safe</a>'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringContainsString('https://example.com', $result->getContent());
         $this->assertStringContainsString('class="link"', $result->getContent());
         $this->assertStringContainsString('id="main"', $result->getContent());
@@ -80,8 +80,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<p>simple text</p>'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringContainsString('simple text', $result->getContent());
     }
 
@@ -91,8 +91,8 @@ final class AttributeCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<div onclick="a()" onload="b()" onmouseenter="c()">content</div>'
         );
-        $step = new AttributeCleanupStep();
-        $result = $step($payload);
+        $attributeCleanupStep = new AttributeCleanupStep();
+        $result = $attributeCleanupStep($payload);
         $this->assertStringNotContainsString('onclick', $result->getContent());
         $this->assertStringNotContainsString('onload', $result->getContent());
         $this->assertStringNotContainsString('onmouseenter', $result->getContent());

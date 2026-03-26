@@ -59,8 +59,8 @@ final class SanitizeTest extends TestCase
     #[Test]
     public function it_accepts_configuration(): void
     {
-        $config = new Configuration(ignoredSteps: [ScriptTagCleanupStep::class]);
-        $sanitize = new Sanitize(type: 'html', configuration: $config);
+        $configuration = new Configuration(ignoredSteps: [ScriptTagCleanupStep::class]);
+        $sanitize = new Sanitize(type: 'html', configuration: $configuration);
         $result = $sanitize->process('<script>alert(1)</script>');
         // Script step is ignored, so decoded script tag remains
         $this->assertInstanceOf(Payload::class, $result);
@@ -69,7 +69,7 @@ final class SanitizeTest extends TestCase
     #[Test]
     public function it_accepts_null_configuration(): void
     {
-        $sanitize = new Sanitize(type: 'html', configuration: null);
+        $sanitize = new Sanitize(type: 'html');
         $result = $sanitize->process('<p>text</p>');
         $this->assertStringContainsString('text', $result->getContent());
     }

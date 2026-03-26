@@ -32,8 +32,8 @@ abstract class PipelineSanitizerAbstract
     private function build(): PipelineInterface
     {
         $pipelineBuilder = new BasePipelineBuilder();
-        $customSteps = $this->configuration !== null ? $this->configuration->customSteps : [];
-        $ignoredSteps = $this->configuration !== null ? $this->configuration->ignoredSteps : [];
+        $customSteps = $this->configuration instanceof Configuration ? $this->configuration->customSteps : [];
+        $ignoredSteps = $this->configuration instanceof Configuration ? $this->configuration->ignoredSteps : [];
         foreach ([...$this->getRegisteredCleanupStep(), ...$customSteps] as $cleanupStep) {
             if (in_array($cleanupStep, $ignoredSteps)) {
                 continue;

@@ -6,7 +6,6 @@ namespace Ipedis\Tests;
 
 use DOMDocument;
 use DOMElement;
-use DOMNode;
 use Ipedis\FileSanitizer\Configuration\Configuration;
 use Ipedis\FileSanitizer\Pipeline\Steps\PhpTagCleanupStep;
 use Ipedis\FileSanitizer\Sanitizer\Sanitize;
@@ -145,9 +144,13 @@ CONTENT;
         for ($i = 0; $i < $counter; ++$i) {
             $inputNode = $inputNodes[$i];
             $outputNode = $outputNodes[$i];
-            if (!$inputNode instanceof DOMElement || !$outputNode instanceof DOMElement) {
+            if (!$inputNode instanceof DOMElement) {
                 continue;
             }
+            if (!$outputNode instanceof DOMElement) {
+                continue;
+            }
+
             if (!$this->isSameNode($inputNode, $outputNode)) {
                 return false;
             }

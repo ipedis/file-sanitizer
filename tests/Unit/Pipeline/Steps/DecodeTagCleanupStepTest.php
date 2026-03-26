@@ -17,8 +17,8 @@ final class DecodeTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '&lt;script&gt;alert("hacked");&lt;/script&gt;'
         );
-        $step = new DecodeTagCleanupStep();
-        $result = $step($payload);
+        $decodeTagCleanupStep = new DecodeTagCleanupStep();
+        $result = $decodeTagCleanupStep($payload);
         $this->assertSame('<script>alert("hacked");</script>', $result->getContent());
     }
 
@@ -28,8 +28,8 @@ final class DecodeTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '&amp; &quot;hello&quot;'
         );
-        $step = new DecodeTagCleanupStep();
-        $result = $step($payload);
+        $decodeTagCleanupStep = new DecodeTagCleanupStep();
+        $result = $decodeTagCleanupStep($payload);
         $this->assertSame('& "hello"', $result->getContent());
     }
 
@@ -39,8 +39,8 @@ final class DecodeTagCleanupStepTest extends TestCase
         $payload = Payload::build(
             content: '<p>plain text</p>'
         );
-        $step = new DecodeTagCleanupStep();
-        $result = $step($payload);
+        $decodeTagCleanupStep = new DecodeTagCleanupStep();
+        $result = $decodeTagCleanupStep($payload);
         $this->assertSame('<p>plain text</p>', $result->getContent());
     }
 
@@ -48,8 +48,8 @@ final class DecodeTagCleanupStepTest extends TestCase
     public function it_handles_empty_content(): void
     {
         $payload = Payload::build(content: '');
-        $step = new DecodeTagCleanupStep();
-        $result = $step($payload);
+        $decodeTagCleanupStep = new DecodeTagCleanupStep();
+        $result = $decodeTagCleanupStep($payload);
         $this->assertSame('', $result->getContent());
     }
 }
