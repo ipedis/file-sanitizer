@@ -7,14 +7,17 @@ namespace Ipedis\FileSanitizer\Configuration;
 use Ipedis\FileSanitizer\Exception\InvalidCleanupStepException;
 use Ipedis\FileSanitizer\Pipeline\Steps\CleanupStepAbstract;
 
-final class Configuration
+final readonly class Configuration
 {
     /**
+     * @param array<class-string<CleanupStepAbstract>> $ignoredSteps
+     * @param array<class-string<CleanupStepAbstract>> $customSteps
+     *
      * @throws InvalidCleanupStepException
      */
     public function __construct(
-        public readonly array $ignoredSteps = [],
-        public readonly array $customSteps = []
+        public array $ignoredSteps = [],
+        public array $customSteps = []
     ) {
         $this->verify();
     }
@@ -26,7 +29,7 @@ final class Configuration
     {
         foreach ($this->customSteps as $customStep) {
             if (!is_subclass_of($customStep, CleanupStepAbstract::class)) {
-                throw new InvalidCleanupStepException(step: $customStep);
+                throw new InvalidCleanupStepException(step: (string) $customStep);
             }
         }
     }

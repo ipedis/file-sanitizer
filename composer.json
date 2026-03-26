@@ -1,33 +1,50 @@
 {
-  "name": "ipedis/file-sanitizer",
-  "type": "library",
-  "autoload": {
-    "psr-4": {
-      "Ipedis\\FileSanitizer\\": "src/"
+    "name": "ipedis/file-sanitizer",
+    "description": "Library for sanitizing HTML and XML files",
+    "type": "library",
+    "require": {
+        "php": ">=8.2",
+        "league/pipeline": "^1.0",
+        "ext-dom": "*",
+        "ext-libxml": "*"
+    },
+    "authors": [
+        {
+            "name": "melchior",
+            "email": "melchior@ipedis.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Ipedis\\FileSanitizer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ipedis\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "rector/rector": "^2.3",
+        "phpunit/phpunit": "^11.5",
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.19",
+        "phpstan/phpstan-strict-rules": "^2.0"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-html coverage",
+        "phpstan": "phpstan analyse --memory-limit 2024M",
+        "pint": "pint",
+        "pint:check": "pint --test",
+        "rector": "rector process",
+        "rector:check": "rector process --dry-run",
+        "qa": [
+            "@rector",
+            "@pint",
+            "@phpstan",
+            "@test"
+        ]
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Ipedis\\Tests\\": "tests/"
-    }
-  },
-  "authors": [
-    {
-      "name": "melchior",
-      "email": "melchior@ipedis.com"
-    }
-  ],
-  "config": {
-  },
-  "minimum-stability": "stable",
-  "require": {
-    "php": ">=8.1",
-    "league/pipeline": "^1.0",
-    "ext-dom": "*",
-    "ext-libxml": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^9.5",
-    "rector/rector": "^2.3"
-  }
 }

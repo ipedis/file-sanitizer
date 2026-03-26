@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ipedis\FileSanitizer\Pipeline\Steps;
 
-
 use Ipedis\FileSanitizer\Pipeline\Payload;
 
 final class DecodeTagCleanupStep extends CleanupStepAbstract

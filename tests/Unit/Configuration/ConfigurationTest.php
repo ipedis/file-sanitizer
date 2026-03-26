@@ -10,17 +10,24 @@ use Ipedis\FileSanitizer\Pipeline\Steps\CdataTagCleanupStep;
 use Ipedis\Tests\Unit\Configuration\Steps\InvalidCustomStep;
 use Ipedis\Tests\Unit\Configuration\Steps\ValidCustomStep;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ConfigurationTest extends TestCase
 {
-    public function testWithEmptyData(): void
+    /**
+     */
+    #[Test]
+    public function with_empty_data(): void
     {
         $configuration = new Configuration();
         $this->assertEmpty($configuration->customSteps);
         $this->assertEmpty($configuration->ignoredSteps);
     }
 
-    public function testWithValidData(): void
+    /**
+     */
+    #[Test]
+    public function with_valid_data(): void
     {
         $configuration = new Configuration(
             ignoredSteps: [CdataTagCleanupStep::class],
@@ -31,11 +38,14 @@ final class ConfigurationTest extends TestCase
         $this->assertNotEmpty($configuration->customSteps);
     }
 
-    public function testWithInvalidData(): void
+    /**
+     */
+    #[Test]
+    public function with_invalid_data(): void
     {
         $this->expectException(InvalidCleanupStepException::class);
         new Configuration(
-            customSteps: [InvalidCustomStep::class]
+            customSteps: [InvalidCustomStep::class] // @phpstan-ignore argument.type
         );
     }
 

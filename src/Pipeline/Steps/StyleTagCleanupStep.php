@@ -23,6 +23,6 @@ final class StyleTagCleanupStep extends CleanupStepAbstract
             }
         }
 
-        return $payload->setContent($domDocument->saveHTML());
+        return $payload->setContent((string) $domDocument->saveHTML());
     }
 }

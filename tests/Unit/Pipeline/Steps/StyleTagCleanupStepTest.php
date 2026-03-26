@@ -7,16 +7,66 @@ namespace Ipedis\Tests\Unit\Pipeline\Steps;
 use Ipedis\FileSanitizer\Pipeline\Payload;
 use Ipedis\FileSanitizer\Pipeline\Steps\StyleTagCleanupStep;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class StyleTagCleanupStepTest extends TestCase
 {
-    public function testProcess(): void
+    #[Test]
+    public function it_removes_style_with_javascript_url(): void
     {
         $payload = Payload::build(
             content: '<style>li {list-style-image: url("javascript:alert(\'XSS\')");}</style><ul><li>blabla</li></ul>'
         );
-        $styleTagCleanupStep = new StyleTagCleanupStep();
-        $payload = $styleTagCleanupStep($payload);
-        $this->assertStringNotContainsString('url("javascript:alert(\'XSS\')")', $payload->getContent());
+        $step = new StyleTagCleanupStep();
+        $result = $step($payload);
+        $this->assertStringNotContainsString('javascript', $result->getContent());
+        $this->assertStringContainsString('blabla', $result->getContent());
+    }
+
+    #[Test]
+    public function it_removes_style_containing_script_keyword(): void
+    {
+        $payload = Payload::build(
+            content: '<style>body { background: url("script:evil"); }</style><p>text</p>'
+        );
+        $step = new StyleTagCleanupStep();
+        $result = $step($payload);
+        $this->assertStringNotContainsString('<style>', $result->getContent());
+        $this->assertStringContainsString('text', $result->getContent());
+    }
+
+    #[Test]
+    public function it_preserves_safe_style_tags(): void
+    {
+        $payload = Payload::build(
+            content: '<style>body { color: red; }</style><p>text</p>'
+        );
+        $step = new StyleTagCleanupStep();
+        $result = $step($payload);
+        $this->assertStringContainsString('color: red', $result->getContent());
+        $this->assertStringContainsString('text', $result->getContent());
+    }
+
+    #[Test]
+    public function it_handles_content_without_style(): void
+    {
+        $payload = Payload::build(
+            content: '<p>no styles here</p>'
+        );
+        $step = new StyleTagCleanupStep();
+        $result = $step($payload);
+        $this->assertStringContainsString('no styles here', $result->getContent());
+    }
+
+    #[Test]
+    public function it_removes_only_malicious_styles_among_multiple(): void
+    {
+        $payload = Payload::build(
+            content: '<style>body { color: blue; }</style><style>div { background: url("javascript:alert(1)"); }</style><p>text</p>'
+        );
+        $step = new StyleTagCleanupStep();
+        $result = $step($payload);
+        $this->assertStringContainsString('color: blue', $result->getContent());
+        $this->assertStringNotContainsString('javascript', $result->getContent());
     }
 }

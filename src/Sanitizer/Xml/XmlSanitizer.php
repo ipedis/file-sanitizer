@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ipedis\FileSanitizer\Sanitizer\Xml;
 
-
 use Ipedis\FileSanitizer\Contract\SanitizerInterface;
 use Ipedis\FileSanitizer\Pipeline\PipelineSanitizerAbstract;
 use Ipedis\FileSanitizer\Pipeline\Steps\CdataTagCleanupStep;
