@@ -147,6 +147,7 @@ CONTENT;
             if (!$inputNode instanceof DOMElement) {
                 continue;
             }
+
             if (!$outputNode instanceof DOMElement) {
                 continue;
             }
