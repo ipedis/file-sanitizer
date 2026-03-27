@@ -12,6 +12,10 @@
         {
             "name": "melchior",
             "email": "melchior@ipedis.com"
+        },
+        {
+            "name": "Yanis",
+            "email": "yanis@ipedis.com"
         }
     ],
     "minimum-stability": "stable",
