@@ -2,6 +2,7 @@
     "name": "ipedis/file-sanitizer",
     "description": "Library for sanitizing HTML and XML files",
     "type": "library",
+    "license": "CC-BY-1.0",
     "require": {
         "php": ">=8.2",
         "league/pipeline": "^1.0",
