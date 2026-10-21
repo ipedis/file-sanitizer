@@ -10,7 +10,7 @@ use Ipedis\FileSanitizer\Pipeline\Payload;
 
 final class AttributeCleanupStep extends CleanupStepAbstract
 {
-    public const ALERT_PATTERN = '#alert\((.*?)\)#';
+    public const string ALERT_PATTERN = '#alert\((.*?)\)#';
 
     protected function process(Payload $payload): Payload
     {

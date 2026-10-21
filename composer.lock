@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "058e2322565e501d1951bf0026959df2",
+    "content-hash": "891e181072bd0f8cb328ab28d1c543a8",
     "packages": [
         {
             "name": "league/pipeline",
@@ -2084,7 +2084,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-dom": "*",
         "ext-libxml": "*"
     },

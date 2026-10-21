@@ -12,9 +12,9 @@ use Ipedis\FileSanitizer\Sanitizer\Xml\XmlSanitizer;
 
 final class SanitizerFactory
 {
-    private const HTML = 'html';
+    private const string HTML = 'html';
 
-    private const XML = 'xml';
+    private const string XML = 'xml';
 
     /**
      * @throws InvalidSanitizerTypeException
