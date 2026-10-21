@@ -8,7 +8,7 @@ use Ipedis\FileSanitizer\Pipeline\Payload;
 
 final class StyleTagCleanupStep extends CleanupStepAbstract
 {
-    private const PATTERN = '#<style\b[^>]*>[\s\S]*?</style>#i';
+    private const string PATTERN = '#<style\b[^>]*>[\s\S]*?</style>#i';
 
     protected function process(Payload $payload): Payload
     {

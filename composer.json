@@ -4,7 +4,7 @@
     "type": "library",
     "license": "CC-BY-1.0",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "league/pipeline": "^1.0",
         "ext-dom": "*",
         "ext-libxml": "*"

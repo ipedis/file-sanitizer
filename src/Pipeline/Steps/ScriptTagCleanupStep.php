@@ -8,7 +8,7 @@ use Ipedis\FileSanitizer\Pipeline\Payload;
 
 final class ScriptTagCleanupStep extends CleanupStepAbstract
 {
-    private const PATTERN = '#<script(.*?)>(.*?)</script>#is';
+    private const string PATTERN = '#<script(.*?)>(.*?)</script>#is';
 
 
     protected function process(Payload $payload): Payload
